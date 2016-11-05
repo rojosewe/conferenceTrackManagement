@@ -51,8 +51,7 @@ public class FileReaderTest {
      * 
      */
 	@Test 
-    public void testForAccentedCharacters() throws IOException
-    {
+    public void testForAccentedCharacters() throws IOException{
 			ConferenceFileReader reader = new ConferenceFileReader();
 			reader.readFile("src/test/resources/strange.txt");
     }
