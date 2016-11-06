@@ -1,38 +1,38 @@
 package com.thoughtworks.trackmanagement.model;
 
-public class Talk implements Comparable<Talk>, Event {
-	
-	private static final String TIMEUNIT = "min";
+public class MiscEvent implements Event {
+
 	private String title;
 	private int time;
 	private int startTime;
-	
-	public Talk() {
+
+	public MiscEvent() {
 		super();
 	}
-	
-	public Talk(String title, int time) {
+
+	public MiscEvent(String title, int time, int startTime) {
 		super();
 		this.title = title;
 		this.time = time;
+		this.startTime = startTime;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public int getTime() {
 		return time;
 	}
-	
+
 	public void setTime(int time) {
 		this.time = time;
 	}
-	
+
 	public int getStartTime() {
 		return startTime;
 	}
@@ -42,10 +42,10 @@ public class Talk implements Comparable<Talk>, Event {
 	}
 
 	public int compareTo(Talk o) {
-		return ((Integer)o.getTime()).compareTo(time);
+		return ((Integer) o.getTime()).compareTo(time);
 	}
-	
-	public String toString(){
-		return title + " " + time + TIMEUNIT;
+
+	public String toString() {
+		return title;
 	}
 }

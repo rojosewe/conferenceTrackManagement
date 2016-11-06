@@ -13,16 +13,18 @@ public class Session {
 	
 	private List<Talk> morningTalks;
 	private List<Talk> eveningTalks;
+	private MiscEvent lunch;
+	private MiscEvent networking;
 	private int timeMorning;
 	private int timeEvening;
-	private int timeNetworking;
 	
 	public Session() {
 		morningTalks = new ArrayList<Talk>();
 		eveningTalks = new ArrayList<Talk>();
 		timeMorning = MORNING_START;
 		timeEvening = EVENING_START;
-		timeNetworking = NETWORKING_START;
+		lunch = new MiscEvent("Lunch", 60, MORNING_END);
+		networking = new MiscEvent("Networking Event", 60, NETWORKING_START);
 	}
 	
 	public List<Talk> getMorningTalks() {
@@ -41,14 +43,6 @@ public class Session {
 		return timeEvening;
 	}
 	
-	public int getTimeNetworking() {
-		return timeNetworking;
-	}
-	
-	public void setTimeNetworking(int timeNetworking) {
-		this.timeNetworking = timeNetworking;
-	}
-	
 	public boolean addTalk(Talk talk){
 		if(!addMorningTalk(talk))
 			return addEveningTalk(talk);
@@ -57,6 +51,7 @@ public class Session {
 	
 	public boolean addMorningTalk(Talk talk){
 		if(timeMorning + talk.getTime() <= MORNING_END){
+			talk.setStartTime(timeMorning);
 			morningTalks.add(talk);
 			timeMorning += talk.getTime();
 			return true;
@@ -66,10 +61,11 @@ public class Session {
 	
 	public boolean addEveningTalk(Talk talk){
 		if(timeEvening  + talk.getTime() <= NETWORKING_END){
+			talk.setStartTime(timeEvening);
 			eveningTalks.add(talk);
 			timeEvening += talk.getTime();
-			if(timeEvening > timeNetworking){
-				timeNetworking += timeEvening - timeNetworking;
+			if(timeEvening > networking.getStartTime()){
+				networking.setStartTime(timeEvening);
 			}
 			return true;
 		}
@@ -84,7 +80,7 @@ public class Session {
 		}else if(eveningTalks.contains(talk)){
 			eveningTalks.remove(talk);
 			timeEvening -= talk.getTime();
-			timeNetworking = Math.max(timeNetworking - talk.getTime(), NETWORKING_START);
+			networking.setStartTime(Math.max(networking.getStartTime() - talk.getTime(), NETWORKING_START));
 			timeMorning -= talk.getTime();
 			return true;
 		}
@@ -93,8 +89,17 @@ public class Session {
 
 	public int getWastedTime(){
 		int wastedMorning = MORNING_END - timeMorning;
-		int wastedEvening = timeNetworking - timeEvening;
+		int wastedEvening = networking.getStartTime() - timeEvening;
 		return wastedMorning + wastedEvening;
+	}
+	
+	public List<Event> getDaysEvents(){
+		List<Event> events = new ArrayList<Event>();
+		events.addAll(morningTalks);
+		events.add(lunch);
+		events.addAll(eveningTalks);
+		events.add(networking);
+		return events;
 	}
 
 }

@@ -25,8 +25,7 @@ public class ConferencePlanner {
 
 	ArrayList<Session> sessions = new ArrayList<Session>();
 	ArrayList<Boolean[]> sessionTalkMatch = new ArrayList<Boolean[]>();
-	
-	
+
 	public boolean buildSessions(List<Talk> talks) throws InvalidTalkSpecsException {
 		Collections.sort(talks);
 		if(talks.size() == 0){
