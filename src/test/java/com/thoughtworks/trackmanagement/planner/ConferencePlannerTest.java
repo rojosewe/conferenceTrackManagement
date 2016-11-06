@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
 import com.thoughtworks.trackmanagement.model.Talk;
 
 import org.junit.Assert;
@@ -41,9 +42,20 @@ public class ConferencePlannerTest {
 	public void ProcessEmptyListOfTalks(){
 		List<Talk> talks = Arrays.asList(new Talk[]{});
 		ConferencePlanner planner = new ConferencePlanner();
-		planner.buildSessions(talks);
+		Assert.assertTrue(planner.buildSessions(talks));
 		Assert.assertTrue(planner.getWasted() == 0);
 		Assert.assertTrue(planner.getSessions().size() == 0);
 	}
 	
+	/**
+	 * The largest talk time cannot be larger than the largest possible slot.
+	 */
+	@Test(expected = InvalidTalkSpecsException.class)
+	public void FailIfLargestTalkIsTooBig(){
+		List<Talk> talks = Arrays.asList(new Talk[]{
+				new Talk("Accounting-Driven Development", 300)
+		});
+		ConferencePlanner planner = new ConferencePlanner();
+		planner.buildSessions(talks);
+	}
 }

@@ -11,7 +11,6 @@ public class Session {
 	public final int NETWORKING_START = 420;
 	public final int NETWORKING_END = 480;
 	
-	private String track;
 	private List<Talk> morningTalks;
 	private List<Talk> eveningTalks;
 	private int timeMorning;
@@ -24,13 +23,6 @@ public class Session {
 		timeMorning = MORNING_START;
 		timeEvening = EVENING_START;
 		timeNetworking = NETWORKING_START;
-	}
-
-	public String getTrack() {
-		return track;
-	}
-	public void setTrack(String track) {
-		this.track = track;
 	}
 	
 	public List<Talk> getMorningTalks() {
@@ -84,9 +76,25 @@ public class Session {
 		return false;
 	}
 	
+	public boolean removeTalk(Talk talk) {
+		if(morningTalks.contains(talk)){
+			morningTalks.remove(talk);
+			timeMorning -= talk.getTime();
+			return true;
+		}else if(eveningTalks.contains(talk)){
+			eveningTalks.remove(talk);
+			timeEvening -= talk.getTime();
+			timeNetworking = Math.max(timeNetworking - talk.getTime(), NETWORKING_START);
+			timeMorning -= talk.getTime();
+			return true;
+		}
+		return false;
+	}
+
 	public int getWastedTime(){
 		int wastedMorning = MORNING_END - timeMorning;
 		int wastedEvening = NETWORKING_START - timeEvening;
 		return wastedMorning + wastedEvening;
 	}
+
 }

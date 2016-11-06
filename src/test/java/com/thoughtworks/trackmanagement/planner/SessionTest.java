@@ -14,7 +14,7 @@ public class SessionTest {
 	 * Add a valid Talk to a session
 	 */
 	@Test
-	public void addValidTalk() throws IOException
+	public void addValidTalk()
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
@@ -25,7 +25,7 @@ public class SessionTest {
 	 * Add a Talk to a full morning session
 	 */
 	@Test
-	public void failAfterAddingFullSession() throws IOException
+	public void failAfterAddingFullSession()
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
@@ -35,10 +35,24 @@ public class SessionTest {
 	}
 	
 	/**
+	 * Add a Talk to an afternoon session if morning full
+	 */
+	@Test
+	public void addToAfterNoonWhenMorningFull()
+	{
+		Session session = new Session();
+		Talk talk = new Talk("A filler", 180);
+		Assert.assertTrue(session.addMorningTalk(talk));
+		Talk talk2 = new Talk("A shorter one", 1);
+		Assert.assertTrue(session.addTalk(talk2));
+		Assert.assertTrue(session.getEveningTalks().contains(talk2));
+	}
+	
+	/**
 	 * Add a Talk to a full morning session
 	 */
 	@Test
-	public void OKAfterMovingNetworkEvent() throws IOException
+	public void OKAfterMovingNetworkEvent()
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
@@ -51,7 +65,7 @@ public class SessionTest {
 	 * Add a Talk to a full morning session
 	 */
 	@Test
-	public void FailAfterMovingNetworkEvent() throws IOException
+	public void FailAfterMovingNetworkEvent()
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 240);

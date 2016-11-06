@@ -1,6 +1,6 @@
 package com.thoughtworks.trackmanagement.model;
 
-public class Talk {
+public class Talk implements Comparable<Talk> {
 	
 	private String title;
 	private int time;
@@ -29,5 +29,9 @@ public class Talk {
 	
 	public void setTime(int time) {
 		this.time = time;
+	}
+	
+	public int compareTo(Talk o) {
+		return ((Integer)o.getTime()).compareTo(time);
 	}
 }
