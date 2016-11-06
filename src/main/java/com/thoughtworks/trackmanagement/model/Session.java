@@ -8,7 +8,6 @@ public class Session {
 	public final int MORNING_START = 0;
 	public final int MORNING_END = 180;
 	public final int EVENING_START = 240;
-	public final int EVENING_END = 480;
 	public final int NETWORKING_START = 420;
 	public final int NETWORKING_END = 480;
 	
@@ -58,6 +57,12 @@ public class Session {
 		this.timeNetworking = timeNetworking;
 	}
 	
+	public boolean addTalk(Talk talk){
+		if(!addMorningTalk(talk))
+			return addEveningTalk(talk);
+		return false;
+	}
+	
 	public boolean addMorningTalk(Talk talk){
 		if(timeMorning + talk.getTime() <= MORNING_END){
 			morningTalks.add(talk);
@@ -68,16 +73,20 @@ public class Session {
 	}
 	
 	public boolean addEveningTalk(Talk talk){
-		if(timeEvening  + talk.getTime() <= EVENING_END){
+		if(timeEvening  + talk.getTime() <= NETWORKING_END){
 			eveningTalks.add(talk);
 			timeEvening += talk.getTime();
 			if(timeEvening > timeNetworking){
-				if(timeEvening > NETWORKING_END)
-					return false;
 				timeNetworking += timeEvening - timeNetworking;
 			}
 			return true;
 		}
 		return false;
+	}
+	
+	public int getWastedTime(){
+		int wastedMorning = MORNING_END - timeMorning;
+		int wastedEvening = NETWORKING_START - timeEvening;
+		return wastedMorning + wastedEvening;
 	}
 }

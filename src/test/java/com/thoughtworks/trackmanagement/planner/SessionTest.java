@@ -1,4 +1,4 @@
-package com.thoughtworks.trackmanagement.utils;
+package com.thoughtworks.trackmanagement.planner;
 
 import java.io.IOException;
 
@@ -7,9 +7,8 @@ import org.junit.Test;
 
 import com.thoughtworks.trackmanagement.model.Session;
 import com.thoughtworks.trackmanagement.model.Talk;
-import com.thoughtworks.trackmanagement.planner.SessionBuilder;
 
-public class SessionBuilderTest {
+public class SessionTest {
 
 	/**
 	 * Add a valid Talk to a session
@@ -19,8 +18,7 @@ public class SessionBuilderTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
-		SessionBuilder builder = new SessionBuilder();
-		Assert.assertEquals(true, builder.addTalkToSession(session, talk));
+		Assert.assertEquals(true, session.addTalk(talk));
 	}
 	
 	/**
@@ -31,10 +29,9 @@ public class SessionBuilderTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
-		SessionBuilder builder = new SessionBuilder();
-		Assert.assertEquals(true, builder.addTalkToSessionMorning(session, talk));
+		Assert.assertEquals(true, session.addMorningTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
-		Assert.assertEquals(false, builder.addTalkToSessionMorning(session, talk2));
+		Assert.assertEquals(false, session.addMorningTalk(talk2));
 	}
 	
 	/**
@@ -45,10 +42,9 @@ public class SessionBuilderTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
-		SessionBuilder builder = new SessionBuilder();
-		Assert.assertEquals(true, builder.addTalkToSessionEvening(session, talk));
+		Assert.assertEquals(true, session.addEveningTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
-		Assert.assertEquals(true, builder.addTalkToSessionEvening(session, talk2));
+		Assert.assertEquals(true, session.addEveningTalk(talk2));
 	}
 	
 	/**
@@ -59,10 +55,9 @@ public class SessionBuilderTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 240);
-		SessionBuilder builder = new SessionBuilder();
-		Assert.assertEquals(true, builder.addTalkToSessionEvening(session, talk));
+		Assert.assertEquals(true, session.addEveningTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
-		Assert.assertEquals(false, builder.addTalkToSessionEvening(session, talk2));
+		Assert.assertEquals(false, session.addEveningTalk(talk2));
 	}
 	
 }
