@@ -1,7 +1,5 @@
 package com.thoughtworks.trackmanagement.planner;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 

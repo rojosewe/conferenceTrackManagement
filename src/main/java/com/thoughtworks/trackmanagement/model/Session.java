@@ -52,7 +52,7 @@ public class Session {
 	public boolean addTalk(Talk talk){
 		if(!addMorningTalk(talk))
 			return addEveningTalk(talk);
-		return false;
+		return true;
 	}
 	
 	public boolean addMorningTalk(Talk talk){
@@ -93,7 +93,7 @@ public class Session {
 
 	public int getWastedTime(){
 		int wastedMorning = MORNING_END - timeMorning;
-		int wastedEvening = NETWORKING_START - timeEvening;
+		int wastedEvening = timeNetworking - timeEvening;
 		return wastedMorning + wastedEvening;
 	}
 

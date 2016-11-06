@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
 import com.thoughtworks.trackmanagement.model.Session;
 import com.thoughtworks.trackmanagement.model.Talk;
 
@@ -26,12 +27,16 @@ public class ConferencePlanner {
 	ArrayList<Boolean[]> sessionTalkMatch = new ArrayList<Boolean[]>();
 	
 	
-	public boolean buildSessions(List<Talk> talks) {
+	public boolean buildSessions(List<Talk> talks) throws InvalidTalkSpecsException {
 		Collections.sort(talks);
-		if(!new Session().addTalk(talks.get(0)))
-			System.out.println("No solution.");
-		sessions.add(new Session());
-		sessionTalkMatch.add(new Boolean[talks.size()]);
+		if(talks.size() == 0){
+			return true;
+		}
+		if(!new Session().addTalk(talks.get(0))){
+			throw new InvalidTalkSpecsException("The largest talk does not fit into "
+					+ "a day's session.");
+		}
+		addNewSession(talks);
 		return schedule(talks, 0);
 		
 	}
@@ -48,17 +53,19 @@ public class ConferencePlanner {
 				return schedule(talks, current + 1);
 			}
 		}
-		addNewSession(current, talk);
-		return true;
-	}
-
-	private void addNewSession(int current, Talk talk) {
-		Session newSession = new Session();
+		Session newSession = addNewSession(talks);
 		newSession.addTalk(talk);
-		sessions.add(newSession);
 		sessionTalkMatch.get(sessions.size() - 1)[current] = true;
+		return schedule(talks, current + 1);
 	}
 	
+	private Session addNewSession(List<Talk> talks) {
+		Session session = new Session();
+		sessions.add(session);
+		sessionTalkMatch.add(new Boolean[talks.size()]);
+		return session;
+	}
+
 	public int getWasted() {
 		int sum = 0;
 		for (Session session : sessions) {
@@ -71,21 +78,4 @@ public class ConferencePlanner {
 		return sessions;
 	}
 	
-	public String ConferenceToString(){
-		StringBuilder sb = new StringBuilder();
-		for (Session session : sessions) {
-			int track = 0;
-			sb.append("Track ").append(track).append(":");
-			for(Talk talk: session.getMorningTalks()){
-				sb.append(talk.getTime()).append(": ").append(talk.getTitle());
-			}
-			sb.append("12:00 Lunch");
-			for(Talk talk: session.getEveningTalks()){
-				sb.append(talk.getTime()).append(": ").append(talk.getTitle());
-			}
-			sb.append(session.getTimeNetworking()).append(": Networking");
-			track++;
-		}
-		return sb.toString();
-	}
 }

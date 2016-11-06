@@ -34,4 +34,8 @@ public class Talk implements Comparable<Talk> {
 	public int compareTo(Talk o) {
 		return ((Integer)o.getTime()).compareTo(time);
 	}
+	
+	public String toString(){
+		return title;
+	}
 }

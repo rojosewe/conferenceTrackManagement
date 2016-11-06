@@ -10,7 +10,64 @@ import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
 import com.thoughtworks.trackmanagement.model.Talk;
 
 public class TalkParserTest {
-
+	
+	/**
+	 * Parse a single talk with valid time
+	 * @throws InvalidTalkSpecsException 
+	 */
+	@Test
+	public void testExampleInput() throws InvalidTalkSpecsException {
+		String[] talks = new String[]{
+				"Writing Fast Tests Against Enterprise Rails 60min",
+				"Overdoing it in Python 45min",
+				"Lua for the Masses 30min",
+				"Ruby Errors from Mismatched Gem Versions 45min",
+				"Common Ruby Errors 45min",
+				"Rails for Python Developers lightning",
+				"Communicating Over Distance 60min",
+				"Accounting-Driven Development 45min",
+				"Woah 30min",
+				"Sit Down and Write 30min",
+				"Pair Programming vs Noise 45min",
+				"Rails Magic 60min",
+				"Ruby on Rails: Why We Should Move On 60min",
+				"Clojure Ate Scala (on my project) 45min",
+				"Programming in the Boondocks of Seattle 30min",
+				"Ruby vs. Clojure for Back-End Development 30min",
+				"Ruby on Rails Legacy App Maintenance 60min",
+				"A World Without HackerNews 30min",
+				"User Interface CSS in Rails Apps 30min"
+		};
+		List<Talk> list = TalkParser.parseList(Arrays.asList(talks));
+		Talk[] trueValues = new Talk[]{
+				new Talk("Writing Fast Tests Against Enterprise Rails", 60),
+				new Talk("Overdoing it in Python", 45),
+				new Talk("Lua for the Masses", 30),
+				new Talk("Ruby Errors from Mismatched Gem Versions", 45),
+				new Talk("Common Ruby Errors", 45),
+				new Talk("Rails for Python Developers", 5),
+				new Talk("Communicating Over Distance", 60),
+				new Talk("Accounting-Driven Development", 45),
+				new Talk("Woah", 30),
+				new Talk("Sit Down and Write", 30),
+				new Talk("Pair Programming vs Noise", 45),
+				new Talk("Rails Magic", 60),
+				new Talk("Ruby on Rails: Why We Should Move On", 60),
+				new Talk("Clojure Ate Scala (on my project)", 45),
+				new Talk("Programming in the Boondocks of Seattle", 30),
+				new Talk("Ruby vs. Clojure for Back-End Development", 30),
+				new Talk("Ruby on Rails Legacy App Maintenance", 60),
+				new Talk("A World Without HackerNews", 30),
+				new Talk("User Interface CSS in Rails Apps", 30)	
+		};
+		for (int i = 0; i < trueValues.length; i++){
+			Talk ground = trueValues[i];
+			Talk testing = list.get(i);
+			Assert.assertEquals(ground.getTitle(), testing.getTitle());
+			Assert.assertEquals(ground.getTime(), testing.getTime());
+		}
+	}
+	
 	/**
 	 * Parse a single talk with valid time
 	 * @throws InvalidTalkSpecsException 
