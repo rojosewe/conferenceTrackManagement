@@ -48,11 +48,15 @@ public class ConferencePlanner {
 				return schedule(talks, current + 1);
 			}
 		}
+		addNewSession(current, talk);
+		return true;
+	}
+
+	private void addNewSession(int current, Talk talk) {
 		Session newSession = new Session();
 		newSession.addTalk(talk);
 		sessions.add(newSession);
 		sessionTalkMatch.get(sessions.size() - 1)[current] = true;
-		return true;
 	}
 	
 	public int getWasted() {

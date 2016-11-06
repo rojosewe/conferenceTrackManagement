@@ -1,14 +1,13 @@
 package com.thoughtworks.trackmanagement.planner;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
-import com.thoughtworks.trackmanagement.model.Talk;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
+import com.thoughtworks.trackmanagement.model.Talk;
 
 public class ConferencePlannerTest {
 
