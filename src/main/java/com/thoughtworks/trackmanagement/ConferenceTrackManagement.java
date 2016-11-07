@@ -11,7 +11,7 @@ import com.thoughtworks.trackmanagement.utils.ConferenceFileReader;
 import com.thoughtworks.trackmanagement.utils.TalkParser;
 
 /**
- * Hello world!
+ * App for scheduling talks during a multi track conference.
  *
  */
 public class ConferenceTrackManagement 
@@ -23,7 +23,7 @@ public class ConferenceTrackManagement
     		ConferencePlanner planner = new ConferencePlanner();
     		ConferenceSerializer serializer = new ConferenceSerializer();
     		
-    		List<String> lines = reader.readFile("src/test/resources/ValidFile.txt");
+    		List<String> lines = reader.readFile(args[0]);
     		List<Talk> talks = TalkParser.parseList(lines);
     		planner.buildSessions(talks);
     		

@@ -10,8 +10,6 @@ import org.junit.Test;
 import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
 import com.thoughtworks.trackmanagement.model.Session;
 import com.thoughtworks.trackmanagement.model.Talk;
-import com.thoughtworks.trackmanagement.serialization.ConferenceSerializer;
-import com.thoughtworks.trackmanagement.serialization.ConferenceSerializer;
 
 public class ConferencePlannerTest {
 
@@ -72,8 +70,6 @@ public class ConferencePlannerTest {
 		Assert.assertTrue(planner.getWasted() > -1);
 		Assert.assertTrue(planner.getSessions().size() > 0);
 		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
-		ConferenceSerializer s = new ConferenceSerializer();
-		System.out.println(s.serialize(planner.getSessions()));
 	}
 	
 	/**
@@ -93,8 +89,6 @@ public class ConferencePlannerTest {
 		Assert.assertTrue(planner.getWasted() > -1);
 		Assert.assertTrue(planner.getSessions().size() > 0);
 		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
-		ConferenceSerializer s = new ConferenceSerializer();
-		System.out.println(s.serialize(planner.getSessions()));
 	}
 	
 	/**
@@ -125,10 +119,9 @@ public class ConferencePlannerTest {
 		});
 		ConferencePlanner planner = new ConferencePlanner();
 		Assert.assertTrue(planner.buildSessions(talks));
-		ConferenceSerializer s = new ConferenceSerializer();
-		System.out.println(s.serialize(planner.getSessions()));
 		Assert.assertEquals(planner.getSessions().size(), 3);
 		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
+		System.out.println(planner.getWasted());
 	}
 	
 	private int allIncluded(List<Session> sessions, List<Talk> talks){

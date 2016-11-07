@@ -1,6 +1,5 @@
 package com.thoughtworks.trackmanagement.model;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface TalkSet{

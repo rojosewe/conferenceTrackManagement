@@ -1,3 +1,47 @@
+Requirements:
+
+Maven2
+
+Run:
+
+mvn compile
+
+mvn test
+
+mvn exec:java -Dexec.mainClass="com.thoughtworks.trackmanagement.ConferenceTrackManagement" -Dexec.args="src/test/resources/ValidFile.txt"
+
+Where src/test/resources/ValidFile.txt is the file with the talks' specification
+according to the problem's statement.
+
+Design:
+
+The program is built in Java.
+ 
+The conference planner can be seen as a bin packing problem. An algorithm 
+must be chosen from the many possible solutions. We programed a greedy algorith 
+with a best fit decreasing approach. This will not return the optimal answer but 
+it will five a good answer of no more than 11/9 * optimal bins + 1. Giving a 
+very fast answer.
+
+The best fit looks to minimize the number of tracks by putting talks where the 
+waste of time (time with no talks waiting for lunch or networking) is minimized.
+
+A Session (Track) is comprised of Two TalkSets: The MorningSession and AfternoonSession.
+A conference is basically a list of Sessions.
+
+A Talk, Lunch and Networking Event are considered Events. Lunch and Networking Event
+Are englobed by MiscEvent.
+
+The file is read by the ConferenceFileReader and passes a list of Strings to
+the TalkParser. The TalkParser must return a list of valid Talks or throw an InvalidTalkException
+if it's not possible.
+  
+ConferencePlanner impelments the bin packing algorithm and builds a Conference
+(List of Sessions) with the best fit possible according to our choice of algorithm.
+
+The ConferenceSerializer is used to print a conference by track and with real hours
+of the day.
+
 Problem: Conference Track Management
  
 You are planning a big programming conference and have received many proposals 

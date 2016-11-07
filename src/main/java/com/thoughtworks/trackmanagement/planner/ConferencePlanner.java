@@ -18,8 +18,6 @@ import com.thoughtworks.trackmanagement.model.Talk;
  * and minimizing the amount of wasted time by session. We will approach by minimizing
  * the number of sessions and in case of a tie, minimizing wasted time.
  * 
- * @author Rodrigo J Weffer
- *
  */
 public class ConferencePlanner {
 
