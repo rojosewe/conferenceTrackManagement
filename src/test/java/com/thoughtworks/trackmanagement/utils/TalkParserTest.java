@@ -89,6 +89,26 @@ public class TalkParserTest {
 		Assert.assertEquals("Rails for Python Developers", validTalk.getTitle());
 		Assert.assertEquals(5, validTalk.getTime());
 	}
+	
+	/**
+	 * Parse a single talk with lightning time
+	 * @throws InvalidTalkSpecsException 
+	 */
+	@Test
+	public void testForWhiteSpaceCleaning() throws InvalidTalkSpecsException {
+		Talk testTalk = TalkParser.parse("     Rails for Python Developers     lightning    ");
+		Assert.assertEquals("Rails for Python Developers", testTalk.getTitle());
+		Assert.assertEquals(5, testTalk.getTime());
+	}
+	
+	/**
+	 * Parse a single talk with lightning time
+	 * @throws InvalidTalkSpecsException 
+	 */
+	@Test(expected = InvalidTalkSpecsException.class)
+	public void failIfZeroTime() throws InvalidTalkSpecsException {
+		TalkParser.parse("Rails for Python Developers 0min");
+	}
 
 	/**
 	 * Parse a single talk with lightning time

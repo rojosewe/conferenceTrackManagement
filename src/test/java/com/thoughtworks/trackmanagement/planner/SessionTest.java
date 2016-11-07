@@ -27,9 +27,9 @@ public class SessionTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
-		Assert.assertEquals(true, session.addMorningTalk(talk));
+		Assert.assertEquals(true, session.getMorningSession().addTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
-		Assert.assertEquals(false, session.addMorningTalk(talk2));
+		Assert.assertEquals(false, session.getMorningSession().addTalk(talk2));
 	}
 	
 	/**
@@ -40,10 +40,10 @@ public class SessionTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
-		Assert.assertTrue(session.addMorningTalk(talk));
+		Assert.assertTrue(session.addTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
 		Assert.assertTrue(session.addTalk(talk2));
-		Assert.assertTrue(session.getEveningTalks().contains(talk2));
+		Assert.assertTrue(session.getEveningSession().getTalks().contains(talk2));
 	}
 	
 	/**
@@ -54,9 +54,9 @@ public class SessionTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 180);
-		Assert.assertEquals(true, session.addEveningTalk(talk));
+		Assert.assertEquals(true, session.getEveningSession().addTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
-		Assert.assertEquals(true, session.addEveningTalk(talk2));
+		Assert.assertEquals(true, session.getEveningSession().addTalk(talk2));
 	}
 	
 	/**
@@ -67,9 +67,9 @@ public class SessionTest {
 	{
 		Session session = new Session();
 		Talk talk = new Talk("A filler", 240);
-		Assert.assertEquals(true, session.addEveningTalk(talk));
+		Assert.assertEquals(true, session.getEveningSession().addTalk(talk));
 		Talk talk2 = new Talk("A shorter one", 1);
-		Assert.assertEquals(false, session.addEveningTalk(talk2));
+		Assert.assertEquals(false, session.getEveningSession().addTalk(talk2));
 	}
 	
 }

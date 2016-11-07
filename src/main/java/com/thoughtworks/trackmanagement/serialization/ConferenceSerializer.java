@@ -1,13 +1,11 @@
 package com.thoughtworks.trackmanagement.serialization;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 import com.thoughtworks.trackmanagement.model.Event;
 import com.thoughtworks.trackmanagement.model.Session;
-import com.thoughtworks.trackmanagement.model.Talk;
 
 public class ConferenceSerializer {
 	

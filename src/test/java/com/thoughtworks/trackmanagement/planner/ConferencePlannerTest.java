@@ -1,5 +1,6 @@
 package com.thoughtworks.trackmanagement.planner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.thoughtworks.trackmanagement.exception.InvalidTalkSpecsException;
+import com.thoughtworks.trackmanagement.model.Session;
 import com.thoughtworks.trackmanagement.model.Talk;
+import com.thoughtworks.trackmanagement.serialization.ConferenceSerializer;
 import com.thoughtworks.trackmanagement.serialization.ConferenceSerializer;
 
 public class ConferencePlannerTest {
@@ -34,6 +37,7 @@ public class ConferencePlannerTest {
 		planner.buildSessions(talks);
 		Assert.assertTrue(planner.getWasted() > -1);
 		Assert.assertTrue(planner.getSessions().size() > 0);
+		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
 	}
 	
 	/**
@@ -67,6 +71,28 @@ public class ConferencePlannerTest {
 		planner.buildSessions(talks);
 		Assert.assertTrue(planner.getWasted() > -1);
 		Assert.assertTrue(planner.getSessions().size() > 0);
+		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
+		ConferenceSerializer s = new ConferenceSerializer();
+		System.out.println(s.serialize(planner.getSessions()));
+	}
+	
+	/**
+	 * Add a valid lot to the Conference
+	 * @throws InvalidTalkSpecsException 
+	 */
+	@Test
+	public void testForVeryLongConference() throws InvalidTalkSpecsException{
+		List<Talk> talks = new ArrayList<Talk>();
+		String letters = "ABCDEFGHTIJKLMNOPQRSTUVWXYZ";
+		for(Integer i = 0; i < 1000; i++){
+			talks.add(new Talk("" + letters.charAt(i % letters.length()), (int)(Math.random()*100 + 1)));
+		}
+		ConferencePlanner planner = new ConferencePlanner();
+		planner.buildSessions(talks);
+		System.out.println(planner.getWasted());
+		Assert.assertTrue(planner.getWasted() > -1);
+		Assert.assertTrue(planner.getSessions().size() > 0);
+		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
 		ConferenceSerializer s = new ConferenceSerializer();
 		System.out.println(s.serialize(planner.getSessions()));
 	}
@@ -97,12 +123,21 @@ public class ConferencePlannerTest {
 				new Talk("Ruby Errors from Mismatched Gem Versions", 180),
 				new Talk("Woah", 180),
 		});
-		
 		ConferencePlanner planner = new ConferencePlanner();
 		Assert.assertTrue(planner.buildSessions(talks));
-		Assert.assertTrue(planner.getSessions().size() == 3);
 		ConferenceSerializer s = new ConferenceSerializer();
 		System.out.println(s.serialize(planner.getSessions()));
+		Assert.assertEquals(planner.getSessions().size(), 3);
+		Assert.assertEquals(allIncluded(planner.getSessions(), talks), 0);
+	}
+	
+	private int allIncluded(List<Session> sessions, List<Talk> talks){
+		int target = talks.size();
+		for (Session session: sessions) {
+			target -= session.getMorningSession().getTalks().size() +
+					session.getEveningSession().getTalks().size();
+		}
+		return target;
 	}
 	
 	/**

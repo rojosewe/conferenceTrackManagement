@@ -5,100 +5,65 @@ import java.util.List;
 
 public class Session {
 
-	public final int MORNING_START = 0;
-	public final int MORNING_END = 180;
-	public final int EVENING_START = 240;
-	public final int NETWORKING_START = 420;
-	public final int NETWORKING_END = 480;
-	
-	private List<Talk> morningTalks;
-	private List<Talk> eveningTalks;
-	private MiscEvent lunch;
-	private MiscEvent networking;
-	private int timeMorning;
-	private int timeEvening;
+	TalkSet morningSession;
+	TalkSet eveningSession;
 	
 	public Session() {
-		morningTalks = new ArrayList<Talk>();
-		eveningTalks = new ArrayList<Talk>();
-		timeMorning = MORNING_START;
-		timeEvening = EVENING_START;
-		lunch = new MiscEvent("Lunch", 60, MORNING_END);
-		networking = new MiscEvent("Networking Event", 60, NETWORKING_START);
+		morningSession = new MorningSession();
+		eveningSession = new AfternoonSession();
 	}
 	
-	public List<Talk> getMorningTalks() {
-		return morningTalks;
+	public TalkSet getMorningSession() {
+		return morningSession;
 	}
-	
-	public List<Talk> getEveningTalks() {
-		return eveningTalks;
+
+	public TalkSet getEveningSession() {
+		return eveningSession;
 	}
-	
-	public int getTimeMorning() {
-		return timeMorning;
-	}
-	
-	public int getTimeEvening() {
-		return timeEvening;
+
+	public int getMinimumWasteAfterAdd(Talk talk){
+		int m = morningSession.getWasteAfterAdd(talk);
+		int e = eveningSession.getWasteAfterAdd(talk);
+		if(m >= 0 && e >= 0)
+			return Math.min(m, e);
+		else if(m < 0 && e < 0)
+			return -1;
+		else if(m < 0)
+			return e;
+		else
+			return m;
 	}
 	
 	public boolean addTalk(Talk talk){
-		if(!addMorningTalk(talk))
-			return addEveningTalk(talk);
-		return true;
-	}
-	
-	public boolean addMorningTalk(Talk talk){
-		if(timeMorning + talk.getTime() <= MORNING_END){
-			talk.setStartTime(timeMorning);
-			morningTalks.add(talk);
-			timeMorning += talk.getTime();
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean addEveningTalk(Talk talk){
-		if(timeEvening  + talk.getTime() <= NETWORKING_END){
-			talk.setStartTime(timeEvening);
-			eveningTalks.add(talk);
-			timeEvening += talk.getTime();
-			if(timeEvening > networking.getStartTime()){
-				networking.setStartTime(timeEvening);
-			}
-			return true;
-		}
-		return false;
+		int m = morningSession.getWasteAfterAdd(talk);
+		int e = eveningSession.getWasteAfterAdd(talk);
+		if(e > -1 && m > -1){
+			if(m <= e)	
+				return morningSession.addTalk(talk);
+			else
+				return eveningSession.addTalk(talk);
+		}else if(e > -1 && m < 0)
+			return eveningSession.addTalk(talk);
+		else if(m > -1 && e < 0)
+			return morningSession.addTalk(talk);
+		else
+			return false;
 	}
 	
 	public boolean removeTalk(Talk talk) {
-		if(morningTalks.contains(talk)){
-			morningTalks.remove(talk);
-			timeMorning -= talk.getTime();
-			return true;
-		}else if(eveningTalks.contains(talk)){
-			eveningTalks.remove(talk);
-			timeEvening -= talk.getTime();
-			networking.setStartTime(Math.max(networking.getStartTime() - talk.getTime(), NETWORKING_START));
-			timeMorning -= talk.getTime();
-			return true;
-		}
-		return false;
+		if(!morningSession.removeTalk(talk))
+			return eveningSession.removeTalk(talk);
+		return true;
 	}
 
 	public int getWastedTime(){
-		int wastedMorning = MORNING_END - timeMorning;
-		int wastedEvening = networking.getStartTime() - timeEvening;
-		return wastedMorning + wastedEvening;
+		return morningSession.getWastedTime() + eveningSession.getWastedTime();
 	}
 	
 	public List<Event> getDaysEvents(){
 		List<Event> events = new ArrayList<Event>();
-		events.addAll(morningTalks);
-		events.add(lunch);
-		events.addAll(eveningTalks);
-		events.add(networking);
+		events.addAll(morningSession.getEvents());
+		events.addAll(eveningSession.getEvents());
 		return events;
 	}
 

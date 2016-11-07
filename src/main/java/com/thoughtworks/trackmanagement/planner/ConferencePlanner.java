@@ -46,23 +46,32 @@ public class ConferencePlanner {
 		}
 		
 		Talk talk = talks.get(current);
-		for(int i = 0; i < sessions.size(); i++){
-			if(sessions.get(i).addTalk(talk)){
-				sessionTalkMatch.get(i)[current] = true;
-				return schedule(talks, current + 1);
-			}
+		int minWaste = Integer.MAX_VALUE;
+		int best = -1;
+		best = getBestStrategy(talk, minWaste, best);
+		if(best == -1){
+			addNewSession(talks);
+			best = sessions.size() - 1;
 		}
-		Session newSession = addNewSession(talks);
-		newSession.addTalk(talk);
-		sessionTalkMatch.get(sessions.size() - 1)[current] = true;
+		sessions.get(best).addTalk(talk);
+		sessionTalkMatch.get(best)[current] = true;
 		return schedule(talks, current + 1);
 	}
+
+	private int getBestStrategy(Talk talk, int minWaste, int best) {
+		for(int i = 0; i < sessions.size(); i++){
+			int waste = sessions.get(i).getMinimumWasteAfterAdd(talk);
+			if(waste != -1 && waste < minWaste){
+				best = i;
+			}
+		}
+		return best;
+	}
 	
-	private Session addNewSession(List<Talk> talks) {
+	private void addNewSession(List<Talk> talks) {
 		Session session = new Session();
 		sessions.add(session);
 		sessionTalkMatch.add(new Boolean[talks.size()]);
-		return session;
 	}
 
 	public int getWasted() {
